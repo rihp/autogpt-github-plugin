@@ -1,7 +1,6 @@
-# AutoGPT Planner Plugin
+# AutoGPT Github Plugin
 Simple github commands for autogpt.
 
-![image](https://user-images.githubusercontent.com/12145726/235688701-af549b76-7f9f-4426-9c88-dd72aca45685.png)
 
 
 ### Getting started
