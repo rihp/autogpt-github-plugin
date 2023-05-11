@@ -8,8 +8,7 @@ from typing import Any, Dict, List, Optional, Tuple, TypedDict, TypeVar
 
 from auto_gpt_plugin_template import AutoGPTPluginTemplate
 
-from .planner import check_plan, create_task, load_tasks, update_task_status, update_plan
-
+from .github import autogpt_github_status
 PromptGenerator = TypeVar("PromptGenerator")
 
 
@@ -19,7 +18,7 @@ class Message(TypedDict):
     content: str
 
 
-class PlannerPlugin(AutoGPTPluginTemplate):
+class GithubPlugin(AutoGPTPluginTemplate):
     """
     This is a task planner system plugin for Auto-GPT which 
     adds the task planning commands to the prompt.
@@ -27,9 +26,9 @@ class PlannerPlugin(AutoGPTPluginTemplate):
 
     def __init__(self):
         super().__init__()
-        self._name = "AutoGPT-Planner-Plugin"
-        self._version = "0.1.1"
-        self._description = "This is a simple task planner module for Auto-GPT. It adds the run_planning_cycle command along with other task related commands. Creates a plan.md file and tasks.json to manage the workloads. For help and discussion: https://discord.com/channels/1092243196446249134/1098737397094694922/threads/1102780261604790393"
+        self._name = "AutoGPT-Github-Plugin"
+        self._version = "0.1.0"
+        self._description = "Fetches the status of the Auto-GPT repository, including forks, stars, and issues."
 
 
     def post_prompt(self, prompt: PromptGenerator) -> PromptGenerator:
@@ -42,41 +41,10 @@ class PlannerPlugin(AutoGPTPluginTemplate):
         """
 
         prompt.add_command(
-            "check_plan",
-            "Read the plan.md with the next goals to achieve",
+            "autogpt_github_status",
+            "Fetches the status of the Auto-GPT repository, including forks, stars, and issues.",
             {},
-            check_plan,
-        )
-
-        prompt.add_command(
-            "run_planning_cycle",
-            "Improves the current plan.md and updates it with progress",
-            {},
-            update_plan,
-        )
-
-        prompt.add_command(
-            "create_task",
-            "creates a task with a task id, description and a completed status of False ",
-            {
-                "task_id": "<int>",
-                "task_description": "<The task that must be performed>",
-            },
-            create_task,
-        )
-
-        prompt.add_command(
-            "load_tasks",
-            "Checks out the task ids, their descriptionsand a completed status",
-            {},
-            load_tasks,
-        )
-
-        prompt.add_command(
-            "mark_task_completed",
-            "Updates the status of a task and marks it as completed",
-            {"task_id": "<int>"},
-            update_task_status,
+            autogpt_github_status,
         )
 
         return prompt
